@@ -1,0 +1,54 @@
+diff --git a/dist/opentype.js b/dist/opentype.js
+index 4dc6dea3bc470c5932364e0162bca66d614c8045..a2ac7987e96a426a45b1bfc92f5c3dfbbdafcef5 100644
+--- a/dist/opentype.js
++++ b/dist/opentype.js
+@@ -374,7 +374,7 @@ var opentype = (() => {
+       const roundedDecimalPart2 = decimalRoundingCache[places][decimalPart];
+       return integerPart + roundedDecimalPart2;
+     }
+-    const roundedDecimalPart = +(Math.round(decimalPart + "e+" + places) + "e-" + places);
++    const roundedDecimalPart = Number(decimalPart.toFixed(places));
+     decimalRoundingCache[places][decimalPart] = roundedDecimalPart;
+     return integerPart + roundedDecimalPart;
+   }
+@@ -751,10 +751,11 @@ var opentype = (() => {
+       let s = "";
+       for (let i = 0; i < arguments.length; i += 1) {
+         const v = arguments[i];
+-        if (v >= 0 && i > 0) {
++        const str = floatToString(v);
++        if (i > 0 && str.charAt(0) !== "-") {
+           s += " ";
+         }
+-        s += floatToString(v);
++        s += str;
+       }
+       return s;
+     }
+diff --git a/dist/opentype.mjs b/dist/opentype.mjs
+index 53ed20eccb08a16519bbd40a866e0bdc3fa9f2d6..241ccee00de40e6dc25a3c74e434827bfbafce51 100644
+--- a/dist/opentype.mjs
++++ b/dist/opentype.mjs
+@@ -342,7 +342,7 @@ function roundDecimal(float, places) {
+     const roundedDecimalPart2 = decimalRoundingCache[places][decimalPart];
+     return integerPart + roundedDecimalPart2;
+   }
+-  const roundedDecimalPart = +(Math.round(decimalPart + "e+" + places) + "e-" + places);
++  const roundedDecimalPart = Number(decimalPart.toFixed(places));
+   decimalRoundingCache[places][decimalPart] = roundedDecimalPart;
+   return integerPart + roundedDecimalPart;
+ }
+@@ -719,10 +719,11 @@ Path.prototype.toPathData = function(options) {
+     let s = "";
+     for (let i = 0; i < arguments.length; i += 1) {
+       const v = arguments[i];
+-      if (v >= 0 && i > 0) {
++      const str = floatToString(v);
++      if (i > 0 && str.charAt(0) !== "-") {
+         s += " ";
+       }
+-      s += floatToString(v);
++      s += str;
+     }
+     return s;
+   }

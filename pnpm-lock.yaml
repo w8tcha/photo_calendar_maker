@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  opentype.js: 9a413cf1e72a7efbd52810c59185085f7b3b894d01de426fd121b8652130e950
+
 importers:
 
   .:
@@ -19,7 +22,7 @@ importers:
         version: 4.2.1
       opentype.js:
         specifier: ^2.0.0
-        version: 2.0.0
+        version: 2.0.0(patch_hash=9a413cf1e72a7efbd52810c59185085f7b3b894d01de426fd121b8652130e950)
       svg2pdf.js:
         specifier: ^2.8.1
         version: 2.8.1(jspdf@4.2.1)
@@ -2619,7 +2622,7 @@ snapshots:
     dependencies:
       which-pm-runs: 1.1.0
 
-  opentype.js@2.0.0: {}
+  opentype.js@2.0.0(patch_hash=9a413cf1e72a7efbd52810c59185085f7b3b894d01de426fd121b8652130e950): {}
 
   optionator@0.9.4:
     dependencies:
