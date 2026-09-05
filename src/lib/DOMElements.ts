@@ -1,3 +1,6 @@
+const introSection = document.querySelector('.intro-section') as HTMLElement;
+const introCtaBtn = document.querySelector('#intro-cta-btn') as HTMLButtonElement;
+
 const newProjectOverlayTriggerBtn = document.querySelector(
   '.new-project-overlay-trigger-btn',
 ) as HTMLButtonElement;
@@ -22,6 +25,8 @@ const controlsContainer = document.querySelector('.controls-container') as HTMLD
 const cropControlsContainer = document.querySelector('.crop-controls-container') as HTMLDivElement;
 
 export {
+  introSection,
+  introCtaBtn,
   calendarContainer,
   controlsContainer,
   cropControlsContainer,

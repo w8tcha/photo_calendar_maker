@@ -1,0 +1,140 @@
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as mixins;
+
+.intro-section {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  overflow-y: auto;
+  background-color: var(--text-light);
+
+  &.hide {
+    display: none;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: var(--sandy-clay);
+
+    svg {
+      width: 2.5rem;
+      height: 2.5rem;
+      stroke: var(--text-light);
+    }
+
+    @include mixins.resize(600) {
+      width: 3.5rem;
+      height: 3.5rem;
+
+      svg {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+    }
+  }
+
+  &__title {
+    font-size: 2.5rem;
+    color: var(--shadow-grey);
+
+    @include mixins.resize(600) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__subtitle {
+    max-width: 40rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--shadow-grey);
+
+    @include mixins.resize(600) {
+      font-size: 0.9rem;
+    }
+  }
+
+  &__features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0.5rem 0;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 10rem;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--shadow-grey);
+    }
+
+    svg {
+      width: 1.75rem;
+      height: 1.75rem;
+      stroke: var(--cool-steel);
+    }
+
+    @include mixins.resize(600) {
+      gap: 1.25rem;
+
+      li {
+        width: 7.5rem;
+        font-size: 0.8rem;
+      }
+
+      svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  &__cta {
+    margin-top: 0.5rem;
+    border: none;
+    background-color: var(--sandy-clay);
+    color: var(--shadow-grey);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition:
+      transform 0.3s,
+      background-color 0.3s ease-in;
+
+    &:hover {
+      color: var(--text-light);
+      background-color: var(--cool-steel);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    @include mixins.resize(600) {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
+  }
+}

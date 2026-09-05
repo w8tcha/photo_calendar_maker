@@ -2,6 +2,8 @@ import '../styles/main.scss';
 
 import { Calendar } from './Calendar';
 import {
+  introSection,
+  introCtaBtn,
   calendarContainer,
   controlsContainer,
   cropControlsContainer,
@@ -42,6 +44,9 @@ async function newProject() {
 }
 
 function newCalendar() {
+  introSection.classList.add('hide');
+  newProjectOverlayTriggerBtn.classList.remove('hide');
+
   controlsContainer.classList.remove('hide');
   if (activeCalendar) {
     activeCalendar.dispose();
@@ -79,6 +84,17 @@ window.addEventListener(
     });
     newProjectOverlayCloseBtn.addEventListener('click', () => {
       animateNewProjectOverlay(newProjectOverlayBG, newProjectOverlaySection, 'out');
+
+      // If no calendar exists yet, return to the intro screen
+      if (!activeCalendar) {
+        introSection.classList.remove('hide');
+      }
+    });
+
+    // Open the new project overlay from the intro screen
+    introCtaBtn.addEventListener('click', () => {
+      introSection.classList.add('hide');
+      animateNewProjectOverlay(newProjectOverlayBG, newProjectOverlaySection, 'in');
     });
 
     // Init dataController
