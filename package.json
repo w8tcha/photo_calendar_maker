@@ -13,6 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --base=/ --outDir ./build",
+    "build:pages": "vite build --base=/photo_calendar_maker/ --outDir ./build --emptyOutDir",
     "deploy": "vite build --outDir ./deploy --base=/projects/photo_calendar_maker/ --emptyOutDir",
     "lint": "eslint src --ext .ts --max-warnings 0",
     "format:check": "prettier . --check",
