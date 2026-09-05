@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --base=/ --outDir ./build",
-    "deploy": "vite build --outDir ../../server/dist/public/projects/photo_calendar_maker --base=/projects/photo_calendar_maker/ --emptyOutDir",
+    "deploy": "vite build --outDir ./deploy --base=/projects/photo_calendar_maker/ --emptyOutDir",
     "lint": "eslint src --ext .ts --max-warnings 0",
     "format:check": "prettier . --check",
     "format:fix": "prettier --write .",
@@ -53,6 +53,7 @@
     "svg2pdf.js": "^2.8.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/user-event": "^14.6.7",
