@@ -1,8 +1,9 @@
 import { Font } from 'opentype.js';
 
-export enum CalendarLanguage {
-  RU = 'ru',
+export enum AppLanguage {
   EN = 'en',
+  DE = 'de',
+  RU = 'ru',
 }
 
 export enum FormatName {
@@ -59,7 +60,7 @@ declare global {
   type CalendarData = {
     startYear: number;
     firstMonthIndex: number;
-    lang: CalendarLanguage;
+    lang: AppLanguage;
     font: string;
     format: FormatName;
     type: CalendarType;

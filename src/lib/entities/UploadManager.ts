@@ -1,6 +1,7 @@
 import { FormatName } from '../../types';
 import { createSVGElement } from '../utils/DOM/createElement/createSVGElement';
 import checkAndShrinkImage from '../utils/checkAndShrinkImage';
+import { t } from '../i18n/i18n';
 
 export type UploadManagerOptions = {
   format: FormatName;
@@ -99,7 +100,7 @@ export default class UploadManager {
       }
     } catch (err) {
       console.log(err);
-      alert('Failed to upload image. Please try a different file.');
+      alert(t('errors.uploadFailed'));
     }
   }
 }

@@ -4,7 +4,7 @@ import {
 } from '../../../assets/A_FormatOptions/A_FormatOptions';
 import { A_outputFormats } from '../../../assets/A_FormatOptions/A_OutputDimensions';
 import fontsData from '../../../assets/sourceFontsData';
-import { CalendarType } from '../../../types';
+import { AppLanguage, CalendarType } from '../../../types';
 import FontsController from './controllers/FontsController';
 import IDBController from './controllers/IDBController';
 
@@ -79,5 +79,19 @@ export default class DataController {
 
     this.calendarProjectData = newCalendarData;
     this.calendarImagesData = [];
+  }
+
+  /**
+   * Updates the language of the current project in place, preserving its
+   * uploaded images (unlike `reset`, which replaces the whole project).
+   */
+  async setLanguage(lang: AppLanguage) {
+    if (!this.calendarProjectData) return;
+
+    const updatedData = { ...this.calendarProjectData, lang };
+
+    await this.IDBController.updateProjectData(updatedData);
+
+    this.calendarProjectData = updatedData;
   }
 }

@@ -1,7 +1,6 @@
 import {
   yearDropdownContainer,
   monthDropdownContainer,
-  langDropdownContainer,
   fontDropdownContainer,
   formatDropdownContainer,
 } from '../../DOMElements';
@@ -12,14 +11,15 @@ import getYears from '../getYears';
 import { getMonthsList } from '../getMonthsList';
 import fontsData from '../../../assets/sourceFontsData';
 import { A_outputFormats } from '../../../assets/A_FormatOptions/A_OutputDimensions';
-import { CalendarLanguage, FormatName } from '../../../types';
+import { FormatName } from '../../../types';
+import { getLanguage, onLanguageChange, t } from '../../i18n/i18n';
 
 export default function createDropdowns() {
   // Create years dropdown
   const yearsInput = new Dropdown<number>({
     container: yearDropdownContainer,
     items: getYears(10),
-    caption: 'Start year',
+    caption: t('dropdown.startYear'),
     renderItem: (item) => item.toString(),
   });
 
@@ -27,36 +27,21 @@ export default function createDropdowns() {
 
   // Get current month...
   const currentMonth = new Date().getMonth();
-  const monthsList = getMonthsList();
+  let monthsList = getMonthsList(getLanguage());
 
   const monthsInput = new Dropdown<number>({
     container: monthDropdownContainer,
     items: Array.from({ length: monthsList.length }, (_, i) => i),
     value: currentMonth,
-    caption: 'First month',
+    caption: t('dropdown.firstMonth'),
     renderItem: (item) => monthsList[item],
-  });
-
-  // Create langs dropdown
-  const langsInput = new Dropdown<CalendarLanguage>({
-    container: langDropdownContainer,
-    items: [CalendarLanguage.RU, CalendarLanguage.EN],
-    value: CalendarLanguage.EN,
-    caption: 'Calendar language',
-    renderItem: (item) => {
-      if (item === 'ru') {
-        return 'Russian';
-      } else {
-        return 'English';
-      }
-    },
   });
 
   // Create fonts dropdown
   const fontsInput = new Dropdown<string>({
     container: fontDropdownContainer,
     items: Object.keys(fontsData),
-    caption: 'Font',
+    caption: t('dropdown.font'),
     renderItem: (font) => `
         <span style="font-family:${font}">
             ${font}
@@ -69,16 +54,32 @@ export default function createDropdowns() {
     container: formatDropdownContainer,
     items: Object.keys(A_outputFormats) as FormatName[],
     value: FormatName.A4_Y,
-    caption: 'Format',
+    caption: t('dropdown.format'),
     renderItem: (format) => {
       const formatPrefix = format.slice(0, 2);
       if (format.endsWith('Y')) {
-        return `${formatPrefix} portrait`;
+        return `${formatPrefix} ${t('format.portrait')}`;
       } else {
-        return `${formatPrefix} landscape`;
+        return `${formatPrefix} ${t('format.landscape')}`;
       }
     },
   });
 
-  return { yearsInput, monthsInput, langsInput, fontsInput, formatsInput };
+  // Keep dropdown captions & translated labels in sync with the app language,
+  // without losing the user's current selection.
+  onLanguageChange((lang) => {
+    monthsList = getMonthsList(lang);
+
+    yearsInput.setCaption(t('dropdown.startYear'));
+
+    monthsInput.setCaption(t('dropdown.firstMonth'));
+    monthsInput.refresh();
+
+    fontsInput.setCaption(t('dropdown.font'));
+
+    formatsInput.setCaption(t('dropdown.format'));
+    formatsInput.refresh();
+  });
+
+  return { yearsInput, monthsInput, fontsInput, formatsInput };
 }

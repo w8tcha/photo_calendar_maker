@@ -1,5 +1,5 @@
 import { icons } from '../../../assets/icons';
-import { CalendarLanguage, CalendarType, FormatName } from '../../../types';
+import { AppLanguage, CalendarType, FormatName } from '../../../types';
 import animateControlsContainer from '../../animations/animateControlsContainer';
 
 import { createHTMLElement } from '../../utils/DOM/createElement/createHTMLElement';
@@ -32,7 +32,7 @@ export type ViewControllerOptions = {
   firstMonthIndex: number;
   year: number;
   font: FontData;
-  lang: CalendarLanguage;
+  lang: AppLanguage;
   storedImages: StoredImage[];
   actionsHandlers: MultiPageControlsCallbacks;
   showLoader: () => void;
@@ -340,7 +340,7 @@ export default class ViewController {
       // Generate week days paths
       this.weekDaysNamesList.map((weekDayName, i) => {
         // exception for 'Cр'
-        const descenderException = i === 2 && this.options.lang === 'ru' ? true : false;
+        const descenderException = i === 2 && this.options.lang === AppLanguage.RU ? true : false;
 
         const weekDayPath = this.getAndPlaceOutline(
           weekDayName,
@@ -598,7 +598,7 @@ export default class ViewController {
       attributes: {
         d: outline.d,
         fill,
-        transform: `translate(${(x - outline.xShift).toFixed(3)} ${(y + outline.yShift).toFixed(3)})`,
+        transform: `translate(${(x - outline.xShift).toFixed(3)} ${(y - outline.yShift).toFixed(3)})`,
       },
     });
   }

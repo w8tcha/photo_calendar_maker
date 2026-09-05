@@ -1,4 +1,4 @@
-import { CalendarType, FormatName, PDFPagesRangeToDownload } from '../../types';
+import { AppLanguage, CalendarType, FormatName, PDFPagesRangeToDownload } from '../../types';
 
 import jsPDF from 'jspdf';
 import 'svg2pdf.js';
@@ -14,6 +14,7 @@ export type DownloadManagerOptions = {
   calendarStartYear: number;
   calendarLastMonth: number;
   calendarEndYear: number;
+  calendarLang: AppLanguage;
   format: FormatName;
   outputDimensions: OutputDimensions;
   mockupOptions: SinglePageMockupOutputOptions | MultiPageMockupOutputOptions;
@@ -170,13 +171,13 @@ export default class DownloadManager {
       const firstMonthYear = this.options.calendarStartYear;
 
       const date1 = new Date(Number(firstMonthYear), Number(firstMonth));
-      const firstMonthName = date1.toLocaleString('default', { month: 'long' });
+      const firstMonthName = date1.toLocaleString(this.options.calendarLang, { month: 'long' });
 
       const lastMonth = this.options.calendarLastMonth;
       const lastMonthYear = this.options.calendarEndYear;
 
       const date2 = new Date(+lastMonthYear, +lastMonth);
-      const lastMonthName = date2.toLocaleString('default', {
+      const lastMonthName = date2.toLocaleString(this.options.calendarLang, {
         month: 'long',
       });
 
@@ -189,7 +190,7 @@ export default class DownloadManager {
     const month = currentMonthContainer.dataset.month;
 
     const date = new Date(Number(year), Number(month));
-    const monthName = date.toLocaleString('default', { month: 'long' });
+    const monthName = date.toLocaleString(this.options.calendarLang, { month: 'long' });
 
     return `${monthName}_${year}`;
   }

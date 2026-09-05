@@ -104,6 +104,26 @@ export class Dropdown<T> {
     this.root.classList.remove('dropdown--open');
   }
 
+  setCaption(caption: string): void {
+    this.caption = caption;
+
+    const captionElement = this.root.querySelector('.dropdown__caption');
+    if (captionElement) captionElement.textContent = this.caption;
+  }
+
+  /**
+   * Re-renders the trigger value and menu item labels using the current
+   * `renderItem`, without changing the selected value. Use this after the
+   * strings `renderItem` produces (e.g. translated labels) have changed.
+   */
+  refresh(): void {
+    this.valueElement.innerHTML = this.options.renderItem(this.value);
+
+    [...this.menu.children].forEach((child, index) => {
+      child.innerHTML = this.options.renderItem(this.options.items[index]);
+    });
+  }
+
   private select(item: T, emit = true) {
     this.value = item;
 

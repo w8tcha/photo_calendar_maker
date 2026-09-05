@@ -5,7 +5,7 @@ import getMonthFirstDay from '../lib/utils/getMonthFirstDay';
 import { getMonthsList } from '../lib/utils/getMonthsList';
 import getWeekDays from '../lib/utils/getWeekDays';
 import { createSVGElement } from '../lib/utils/DOM/createElement/createSVGElement';
-import { CalendarLanguage } from '../types';
+import { AppLanguage } from '../types';
 
 describe('calendar utility helpers', () => {
   it('returns 29 days for February in a leap year', () => {
@@ -17,7 +17,7 @@ describe('calendar utility helpers', () => {
   });
 
   it('returns the russian month names with 12 items', () => {
-    const months = getMonthsList('ru');
+    const months = getMonthsList(AppLanguage.RU);
 
     expect(months).toHaveLength(12);
     expect(months[0]).toBe('Январь');
@@ -25,7 +25,7 @@ describe('calendar utility helpers', () => {
   });
 
   it('returns the weekday names in the requested language', () => {
-    const weekDays = getWeekDays('short', CalendarLanguage.RU);
+    const weekDays = getWeekDays('short', AppLanguage.RU);
 
     expect(weekDays).toHaveLength(7);
     expect(weekDays[0]).toBe('Пн');

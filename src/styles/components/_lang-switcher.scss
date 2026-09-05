@@ -1,0 +1,48 @@
+@use '../abstracts/variables' as vars;
+@use '../abstracts/mixins' as mixins;
+
+.lang-switcher {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 5;
+
+  select {
+    appearance: none;
+    border: 2px solid var(--sandy-clay);
+    border-radius: 0.75rem;
+    background: var(--shadow-grey);
+    color: var(--text-light);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.75rem 0.5rem 0.75rem;
+    cursor: pointer;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fffcf0' d='M7 10l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: var(--cool-steel);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--cool-steel);
+    }
+  }
+
+  @include mixins.resize(600) {
+    top: 0.5rem;
+    left: 0.5rem;
+
+    select {
+      font-size: 0.75rem;
+      padding: 0.4rem 1.5rem 0.4rem 0.6rem;
+    }
+  }
+}

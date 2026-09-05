@@ -115,6 +115,7 @@ export class Calendar {
       calendarStartYear: this.startYear,
       calendarLastMonth: this.lastMonth,
       calendarEndYear: this.endYear,
+      calendarLang: lang,
       format: format,
       outputDimensions: this.outputDimensions,
       mockupOptions: this.mockupOptions,

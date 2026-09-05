@@ -100,6 +100,19 @@ export default class IDBController {
     }
   }
 
+  async updateProjectData(data: CalendarData) {
+    const db = await this.openDB();
+    try {
+      const tx = db.transaction(db.objectStoreNames, 'readwrite');
+
+      await this.promisifyRequest(tx.objectStore('current_project_data').put({ id: 0, ...data }));
+
+      await this.transactionComplete(tx);
+    } finally {
+      db.close();
+    }
+  }
+
   async saveToIDB(image: Blob, index: number) {
     const db = await this.openDB();
 

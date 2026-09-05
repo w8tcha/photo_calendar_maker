@@ -16,9 +16,10 @@ const getButton = document.querySelector('#get-button') as HTMLButtonElement;
 
 const yearDropdownContainer = document.querySelector('#year-dropdown') as HTMLDivElement;
 const monthDropdownContainer = document.querySelector('#month-dropdown') as HTMLDivElement;
-const langDropdownContainer = document.querySelector('#lang-dropdown') as HTMLDivElement;
 const fontDropdownContainer = document.querySelector('#font-dropdown') as HTMLDivElement;
 const formatDropdownContainer = document.querySelector('#format-dropdown') as HTMLDivElement;
+
+const langSwitcherSelect = document.querySelector('#lang-switcher-select') as HTMLSelectElement;
 
 const calendarContainer = document.querySelector('.calendar-container') as HTMLDivElement;
 const controlsContainer = document.querySelector('.controls-container') as HTMLDivElement;
@@ -38,7 +39,7 @@ export {
   newProjectOverlayCloseBtn,
   yearDropdownContainer,
   monthDropdownContainer,
-  langDropdownContainer,
   fontDropdownContainer,
   formatDropdownContainer,
+  langSwitcherSelect,
 };

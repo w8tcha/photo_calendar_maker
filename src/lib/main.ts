@@ -13,12 +13,20 @@ import {
   newProjectOverlaySection,
   newProjectOverlayBG,
   newProjectOverlayCloseBtn,
+  langSwitcherSelect,
 } from './DOMElements';
 import DataController from './entities/DataController/DataController';
 import animateTriggerBtn from './animations/animateTriggerBtn';
 import animateNewProjectOverlay from './animations/animateNewProjectOverlay';
 import createDropdowns from './utils/DOM/createDropdowns';
-import { CalendarType } from '../types';
+import { AppLanguage, CalendarType } from '../types';
+import {
+  applyStaticTranslations,
+  getLanguage,
+  onLanguageChange,
+  setLanguage,
+  t,
+} from './i18n/i18n';
 
 let activeCalendar: Calendar | null = null;
 let dataController: DataController | null;
@@ -34,7 +42,7 @@ async function newProject() {
   const newCalendarData: CalendarData = {
     startYear: userInputs.yearsInput.value,
     firstMonthIndex: userInputs.monthsInput.value,
-    lang: userInputs.langsInput.value,
+    lang: getLanguage(),
     font: userInputs.fontsInput.value,
     format: userInputs.formatsInput.value,
     type: multiModeBtn.checked ? CalendarType.MultiPage : CalendarType.SinglePage,
@@ -44,13 +52,11 @@ async function newProject() {
     // Set new calendar in IDB via DS with user's input data
     await dataController?.reset(newCalendarData);
 
-    // Purge all current content
-    calendarContainer.innerHTML = '';
     // Generate new calendar
     newCalendar();
   } catch (err) {
     console.log('Failed to create new project:', err);
-    alert('Failed to create the new calendar. Please try again.');
+    alert(t('errors.createProjectFailed'));
   }
 }
 
@@ -63,6 +69,9 @@ function newCalendar() {
     activeCalendar.dispose();
   }
 
+  // Purge any previously rendered calendar markup before rendering the new one.
+  calendarContainer.innerHTML = '';
+
   activeCalendar = new Calendar(
     {
       calendarContainer,
@@ -73,10 +82,32 @@ function newCalendar() {
   );
 }
 
+// Keep an already-created calendar's language (month/weekday names) in sync
+// with the app-wide language, since there's no separate per-calendar choice.
+onLanguageChange(async (lang: AppLanguage) => {
+  if (!dataController?.calendarProjectData) return;
+
+  try {
+    await dataController.setLanguage(lang);
+    newCalendar();
+  } catch (err) {
+    console.log('Failed to switch calendar language:', err);
+  }
+});
+
 // Init
 window.addEventListener(
   'DOMContentLoaded',
   async () => {
+    // Apply the persisted/browser-detected app language to static UI text
+    // before building anything else that reads translated strings.
+    applyStaticTranslations();
+
+    langSwitcherSelect.value = getLanguage();
+    langSwitcherSelect.addEventListener('change', () => {
+      setLanguage(langSwitcherSelect.value as AppLanguage);
+    });
+
     userInputs = createDropdowns();
 
     // Disable calendar-creation entry points until fonts are loaded and any
@@ -129,6 +160,12 @@ window.addEventListener(
 
       // If data in DS - init new project
       if (dataController.calendarProjectData) {
+        // Keep the restored project's language in sync with the current
+        // app-wide language (e.g. it was changed since this project was saved).
+        if (dataController.calendarProjectData.lang !== getLanguage()) {
+          await dataController.setLanguage(getLanguage());
+        }
+
         newCalendar();
       }
     } catch (err) {

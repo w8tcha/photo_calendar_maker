@@ -15,6 +15,15 @@
 </head>
 
 <body>
+  <!-- Global app language switcher -->
+  <div class="lang-switcher">
+    <select id="lang-switcher-select" aria-label="Language">
+      <option value="en">English</option>
+      <option value="de">Deutsch</option>
+      <option value="ru">Русский</option>
+    </select>
+  </div>
+
   <!-- Intro / welcome screen -->
   <section class="intro-section">
     <div class="intro-section__icon">
@@ -29,8 +38,8 @@
       </svg>
     </div>
 
-    <h1 class="intro-section__title">Design your own photo calendar</h1>
-    <p class="intro-section__subtitle">
+    <h1 class="intro-section__title" data-i18n="intro.title">Design your own photo calendar</h1>
+    <p class="intro-section__subtitle" data-i18n="intro.subtitle">
       Turn your favorite photos into a beautiful, printable calendar — right in your browser.
       Nothing is uploaded to a server, and no account is needed.
     </p>
@@ -43,7 +52,7 @@
           <circle cx="9" cy="9" r="2" />
           <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
         </svg>
-        <span>Add a photo for every month</span>
+        <span data-i18n="intro.feature1">Add a photo for every month</span>
       </li>
       <li>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -58,7 +67,7 @@
           <line x1="8" x2="8" y1="10" y2="14" />
           <line x1="16" x2="16" y1="18" y2="22" />
         </svg>
-        <span>Choose layout, font &amp; language</span>
+        <span data-i18n="intro.feature2">Choose your layout & font</span>
       </li>
       <li>
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -67,11 +76,11 @@
           <polyline points="7 10 12 15 17 10" />
           <line x1="12" x2="12" y1="15" y2="3" />
         </svg>
-        <span>Export as PDF or JPG, ready to print</span>
+        <span data-i18n="intro.feature3">Export as PDF or JPG, ready to print</span>
       </li>
     </ul>
 
-    <button class="intro-section__cta" id="intro-cta-btn">Create your calendar</button>
+    <button class="intro-section__cta" id="intro-cta-btn" data-i18n="intro.cta">Create your calendar</button>
   </section>
 
   <!-- New project overlay -->
@@ -88,7 +97,7 @@
   </button>
 
   <section class="new-project-section">
-    <h1>New calendar</h1>
+    <h1 data-i18n="newProject.title">New calendar</h1>
     <div class="new-project-section__close-modal">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -102,24 +111,23 @@
     <div class="new-project-section__mode-radio-btns">
       <div class="single">
         <input type="radio" id="single-page" name="calendar-mode" value="single-page" />
-        <label for="single-page">Single-page</label>
+        <label for="single-page" data-i18n="newProject.singlePage">Single-page</label>
       </div>
       <div class="multi">
         <input type="radio" id="multi-page" name="calendar-mode" value="multi-page" checked />
-        <label for="multi-page">Multi-page</label><br />
+        <label for="multi-page" data-i18n="newProject.multiPage">Multi-page</label><br />
       </div>
     </div>
 
     <div class="new-project-section__calendar-options">
       <div id="year-dropdown"></div>
       <div id="month-dropdown"></div>
-      <div id="lang-dropdown"></div>
       <div id="font-dropdown"></div>
       <div id="format-dropdown"></div>
     </div>
 
     <div class="new-project-section__get-button-container">
-      <button id="get-button">Create</button>
+      <button id="get-button" data-i18n="newProject.create">Create</button>
     </div>
   </section>
 
