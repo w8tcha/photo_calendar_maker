@@ -1,4 +1,4 @@
-export const getMonthsList = (lang: string = 'ru') => {
+export const getMonthsList = (lang: string = 'en') => {
   return Array.from({ length: 12 }, (_, i) => {
     let monthName = new Intl.DateTimeFormat(lang, { month: 'long' }).format(new Date(0, i));
 

@@ -339,7 +339,7 @@ export default class ViewController {
 
       // Generate week days paths
       this.weekDaysNamesList.map((weekDayName, i) => {
-        // исключение для 'Cр'
+        // exception for 'Cр'
         const descenderException = i === 2 && this.options.lang === 'ru' ? true : false;
 
         const weekDayPath = this.getAndPlaceOutline(
@@ -621,7 +621,7 @@ export default class ViewController {
     let y = initialY;
 
     //
-    // Создаем сетку
+    // Create the grid
     //
 
     for (let i = 0; i < 42; i++) {
@@ -640,7 +640,7 @@ export default class ViewController {
     }
 
     //
-    // Предыдущий месяц
+    // Previous month
     //
 
     let prev = prevMonthDays;
@@ -661,7 +661,7 @@ export default class ViewController {
     }
 
     //
-    // Текущий месяц
+    // Current month
     //
 
     let cellIndex = startIndex;
@@ -675,7 +675,7 @@ export default class ViewController {
     }
 
     //
-    // Следующий месяц
+    // Next month
     //
 
     let next = 1;

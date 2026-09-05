@@ -19,7 +19,7 @@ export default function createDropdowns() {
   const yearsInput = new Dropdown<number>({
     container: yearDropdownContainer,
     items: getYears(10),
-    caption: 'Начальный год',
+    caption: 'Start year',
     renderItem: (item) => item.toString(),
   });
 
@@ -33,7 +33,7 @@ export default function createDropdowns() {
     container: monthDropdownContainer,
     items: Array.from({ length: monthsList.length }, (_, i) => i),
     value: currentMonth,
-    caption: 'Первый месяц',
+    caption: 'First month',
     renderItem: (item) => monthsList[item],
   });
 
@@ -41,11 +41,11 @@ export default function createDropdowns() {
   const langsInput = new Dropdown<CalendarLanguage>({
     container: langDropdownContainer,
     items: [CalendarLanguage.RU, CalendarLanguage.EN],
-    value: CalendarLanguage.RU,
-    caption: 'Язык календаря',
+    value: CalendarLanguage.EN,
+    caption: 'Calendar language',
     renderItem: (item) => {
       if (item === 'ru') {
-        return 'Русский';
+        return 'Russian';
       } else {
         return 'English';
       }
@@ -56,7 +56,7 @@ export default function createDropdowns() {
   const fontsInput = new Dropdown<string>({
     container: fontDropdownContainer,
     items: Object.keys(fontsData),
-    caption: 'Шрифт',
+    caption: 'Font',
     renderItem: (font) => `
         <span style="font-family:${font}">
             ${font}
@@ -69,13 +69,13 @@ export default function createDropdowns() {
     container: formatDropdownContainer,
     items: Object.keys(A_outputFormats) as FormatName[],
     value: FormatName.A4_Y,
-    caption: 'Формат',
+    caption: 'Format',
     renderItem: (format) => {
       const formatPrefix = format.slice(0, 2);
       if (format.endsWith('Y')) {
-        return `${formatPrefix} вертикальный`;
+        return `${formatPrefix} portrait`;
       } else {
-        return `${formatPrefix} горизонтальный`;
+        return `${formatPrefix} landscape`;
       }
     },
   });
