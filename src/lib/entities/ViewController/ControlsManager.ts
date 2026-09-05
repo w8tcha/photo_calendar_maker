@@ -1,5 +1,18 @@
 import { icons } from '../../../assets/icons';
 import { createHTMLElement } from '../../utils/DOM/createElement/createHTMLElement';
+import { t } from '../../i18n/i18n';
+import { TranslationKey } from '../../i18n/translations';
+
+// Icon-only controls have no visible label, so give them both an accessible
+// name (aria-label) and a CSS-only visual tooltip (data-tooltip) driven by
+// the same translation. `pos` anchors the tooltip for elements flush against
+// a screen edge, where the default centered-above placement would clip.
+function tooltipAttrs(key: TranslationKey, pos?: 'left' | 'right'): Record<string, string> {
+  const label = t(key);
+  const attrs: Record<string, string> = { 'aria-label': label, 'data-tooltip': label };
+  if (pos) attrs['data-tooltip-pos'] = pos;
+  return attrs;
+}
 
 export type ControlsCallbacks = {
   onDownloadCurrentPdf: () => void;
@@ -55,6 +68,7 @@ export class BasicControlsManager extends ControlsManager {
       parentToAppend: this.controlsContainer,
       id: 'pdf-download-current',
       content: icons.pdfSingle,
+      attributes: tooltipAttrs('tooltip.downloadCurrentPdf'),
     });
 
     this.jpgDownloadBtn = createHTMLElement({
@@ -62,6 +76,7 @@ export class BasicControlsManager extends ControlsManager {
       parentToAppend: this.controlsContainer,
       id: 'jpg-download',
       content: icons.jpg,
+      attributes: tooltipAttrs('tooltip.downloadJpg'),
     });
 
     this.cropBtn = createHTMLElement({
@@ -69,6 +84,7 @@ export class BasicControlsManager extends ControlsManager {
       id: 'crop-btn',
       content: icons.crop,
       parentToAppend: this.controlsContainer,
+      attributes: tooltipAttrs('tooltip.crop'),
     });
 
     this.uploadImgInput = createHTMLElement({
@@ -91,6 +107,7 @@ export class BasicControlsManager extends ControlsManager {
       parentToAppend: this.controlsContainer,
       attributes: {
         for: 'upload-input',
+        ...tooltipAttrs('tooltip.upload'),
       },
     });
   }
@@ -151,6 +168,7 @@ export class MultiPageControlsManager extends BasicControlsManager {
       id: 'pdf-download-all',
       className: 'multiple-btn',
       content: icons.pdfMulti,
+      attributes: tooltipAttrs('tooltip.downloadAllPdf'),
       insertTo: {
         element: this.controlsContainer,
         position: 'afterbegin',
@@ -162,6 +180,7 @@ export class MultiPageControlsManager extends BasicControlsManager {
       id: 'prev-month',
       className: 'nav-btn',
       content: icons.prev,
+      attributes: tooltipAttrs('tooltip.prevMonth', 'right'),
       insertTo: {
         element: this.controlsContainer,
         position: 'afterbegin',
@@ -191,6 +210,7 @@ export class MultiPageControlsManager extends BasicControlsManager {
       content: icons.uploadMulti,
       attributes: {
         for: 'upload-multiple-input',
+        ...tooltipAttrs('tooltip.uploadMultiple'),
       },
       insertTo: {
         element: this.controlsContainer,
@@ -203,6 +223,7 @@ export class MultiPageControlsManager extends BasicControlsManager {
       id: 'next-month',
       className: 'nav-btn',
       content: icons.next,
+      attributes: tooltipAttrs('tooltip.nextMonth', 'left'),
       insertTo: {
         element: this.controlsContainer,
         position: 'beforeend',

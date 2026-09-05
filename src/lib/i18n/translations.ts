@@ -19,7 +19,18 @@ export type TranslationKey =
   | 'format.portrait'
   | 'format.landscape'
   | 'errors.createProjectFailed'
-  | 'errors.uploadFailed';
+  | 'errors.uploadFailed'
+  | 'tooltip.downloadCurrentPdf'
+  | 'tooltip.downloadJpg'
+  | 'tooltip.crop'
+  | 'tooltip.upload'
+  | 'tooltip.downloadAllPdf'
+  | 'tooltip.prevMonth'
+  | 'tooltip.nextMonth'
+  | 'tooltip.uploadMultiple'
+  | 'tooltip.newProject'
+  | 'tooltip.closeModal'
+  | 'tooltip.languageSwitcher';
 
 export const LANGUAGE_LABELS: Record<AppLanguage, string> = {
   [AppLanguage.EN]: 'English',
@@ -49,6 +60,17 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
     'format.landscape': 'landscape',
     'errors.createProjectFailed': 'Failed to create the new calendar. Please try again.',
     'errors.uploadFailed': 'Failed to upload image. Please try a different file.',
+    'tooltip.downloadCurrentPdf': 'Download this month as PDF',
+    'tooltip.downloadJpg': 'Download this month as JPG',
+    'tooltip.crop': 'Crop photo',
+    'tooltip.upload': 'Upload photo',
+    'tooltip.downloadAllPdf': 'Download entire calendar as PDF',
+    'tooltip.prevMonth': 'Previous month',
+    'tooltip.nextMonth': 'Next month',
+    'tooltip.uploadMultiple': 'Upload photos for all months',
+    'tooltip.newProject': 'Create new calendar',
+    'tooltip.closeModal': 'Close',
+    'tooltip.languageSwitcher': 'Language',
   },
   [AppLanguage.DE]: {
     'app.pageTitle': 'Fotokalender-Generator',
@@ -73,6 +95,17 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
       'Der neue Kalender konnte nicht erstellt werden. Bitte versuche es erneut.',
     'errors.uploadFailed':
       'Das Bild konnte nicht hochgeladen werden. Bitte versuche eine andere Datei.',
+    'tooltip.downloadCurrentPdf': 'Diesen Monat als PDF herunterladen',
+    'tooltip.downloadJpg': 'Diesen Monat als JPG herunterladen',
+    'tooltip.crop': 'Foto zuschneiden',
+    'tooltip.upload': 'Foto hochladen',
+    'tooltip.downloadAllPdf': 'Gesamten Kalender als PDF herunterladen',
+    'tooltip.prevMonth': 'Vorheriger Monat',
+    'tooltip.nextMonth': 'Nächster Monat',
+    'tooltip.uploadMultiple': 'Fotos für alle Monate hochladen',
+    'tooltip.newProject': 'Neuen Kalender erstellen',
+    'tooltip.closeModal': 'Schließen',
+    'tooltip.languageSwitcher': 'Sprache',
   },
   [AppLanguage.RU]: {
     'app.pageTitle': 'Генератор фотокалендаря',
@@ -95,5 +128,16 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
     'format.landscape': 'альбомная',
     'errors.createProjectFailed': 'Не удалось создать новый календарь. Попробуйте ещё раз.',
     'errors.uploadFailed': 'Не удалось загрузить изображение. Попробуйте другой файл.',
+    'tooltip.downloadCurrentPdf': 'Скачать этот месяц в PDF',
+    'tooltip.downloadJpg': 'Скачать этот месяц в JPG',
+    'tooltip.crop': 'Обрезать фото',
+    'tooltip.upload': 'Загрузить фото',
+    'tooltip.downloadAllPdf': 'Скачать весь календарь в PDF',
+    'tooltip.prevMonth': 'Предыдущий месяц',
+    'tooltip.nextMonth': 'Следующий месяц',
+    'tooltip.uploadMultiple': 'Загрузить фото для всех месяцев',
+    'tooltip.newProject': 'Создать новый календарь',
+    'tooltip.closeModal': 'Закрыть',
+    'tooltip.languageSwitcher': 'Язык',
   },
 };

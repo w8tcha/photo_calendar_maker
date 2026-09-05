@@ -1,0 +1,141 @@
+// CSS-only tooltips. Usage: add `data-tooltip="label"` to any element (it
+// needs an accessible name of its own too, e.g. `aria-label`, since this is
+// purely visual and ignored by screen readers). `data-tooltip-pos` picks
+// where it's anchored: default is centered above; "bottom" flips it below
+// (for elements near the top of the viewport); "left"/"right" anchor it to
+// the side, vertically centered (for elements flush against a screen edge,
+// where a centered-above tooltip would run off-screen).
+
+// `:where()` has zero specificity, so this never fights a component's own
+// `position` rule (e.g. `.lang-switcher { position: fixed }`) regardless of
+// stylesheet import order — it only applies when nothing else already sets one.
+:where([data-tooltip]) {
+  position: relative;
+}
+
+[data-tooltip]::after,
+[data-tooltip]::before {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  position: absolute;
+  left: 50%;
+  z-index: 20;
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0s 0.15s;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+
+  bottom: calc(100% + 0.6rem);
+  transform: translate(-50%, 4px);
+
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--sandy-clay);
+  border-radius: 0.5rem;
+
+  background: var(--shadow-grey);
+  color: var(--text-light);
+
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  white-space: nowrap;
+
+  box-shadow: 0.1rem 0.1rem 0.3rem rgb(0 0 0 / 0.25);
+}
+
+[data-tooltip]::before {
+  content: '';
+
+  bottom: calc(100% + 0.15rem);
+  transform: translate(-50%, 4px);
+
+  border: 0.3rem solid transparent;
+  border-top-color: var(--shadow-grey);
+}
+
+[data-tooltip][data-tooltip-pos='bottom']::after {
+  bottom: auto;
+  top: calc(100% + 0.6rem);
+  transform: translate(-50%, -4px);
+}
+
+[data-tooltip][data-tooltip-pos='bottom']::before {
+  bottom: auto;
+  top: calc(100% + 0.15rem);
+  transform: translate(-50%, -4px);
+
+  border-top-color: transparent;
+  border-bottom-color: var(--shadow-grey);
+}
+
+[data-tooltip][data-tooltip-pos='right']::after,
+[data-tooltip][data-tooltip-pos='left']::after {
+  bottom: auto;
+  top: 50%;
+}
+
+[data-tooltip][data-tooltip-pos='right']::before,
+[data-tooltip][data-tooltip-pos='left']::before {
+  bottom: auto;
+  top: 50%;
+  border-top-color: transparent;
+}
+
+[data-tooltip][data-tooltip-pos='right']::after {
+  left: calc(100% + 0.6rem);
+  transform: translate(-4px, -50%);
+}
+
+[data-tooltip][data-tooltip-pos='right']::before {
+  left: calc(100% + 0.15rem);
+  transform: translate(-4px, -50%);
+
+  border-right-color: var(--shadow-grey);
+}
+
+[data-tooltip][data-tooltip-pos='left']::after {
+  left: auto;
+  right: calc(100% + 0.6rem);
+  transform: translate(4px, -50%);
+}
+
+[data-tooltip][data-tooltip-pos='left']::before {
+  left: auto;
+  right: calc(100% + 0.15rem);
+  transform: translate(4px, -50%);
+
+  border-left-color: var(--shadow-grey);
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::after,
+[data-tooltip]:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+
+  transition:
+    opacity 0.15s ease 0.3s,
+    transform 0.15s ease 0.3s,
+    visibility 0s 0.3s;
+}
+
+[data-tooltip][data-tooltip-pos='right']:hover::after,
+[data-tooltip][data-tooltip-pos='right']:hover::before,
+[data-tooltip][data-tooltip-pos='right']:focus-visible::after,
+[data-tooltip][data-tooltip-pos='right']:focus-visible::before,
+[data-tooltip][data-tooltip-pos='left']:hover::after,
+[data-tooltip][data-tooltip-pos='left']:hover::before,
+[data-tooltip][data-tooltip-pos='left']:focus-visible::after,
+[data-tooltip][data-tooltip-pos='left']:focus-visible::before {
+  transform: translate(0, -50%);
+}

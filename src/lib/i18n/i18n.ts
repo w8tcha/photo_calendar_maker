@@ -48,6 +48,16 @@ export function applyStaticTranslations(): void {
     const key = el.dataset.i18n as TranslationKey;
     el.textContent = t(key);
   });
+
+  document.querySelectorAll<HTMLElement>('[data-i18n-tooltip]').forEach((el) => {
+    const key = el.dataset.i18nTooltip as TranslationKey;
+    el.setAttribute('data-tooltip', t(key));
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((el) => {
+    const key = el.dataset.i18nAriaLabel as TranslationKey;
+    el.setAttribute('aria-label', t(key));
+  });
 }
 
 export function setLanguage(lang: AppLanguage): void {
