@@ -23,6 +23,11 @@ import { CalendarType } from '../types';
 let activeCalendar: Calendar | null = null;
 let dataController: DataController | null;
 
+// Guards against the intro/new-project CTAs firing before font loading and
+// saved-project restoration have finished, which would let a new project
+// silently overwrite a not-yet-restored saved one.
+let isReady = false;
+
 let userInputs: ReturnType<typeof createDropdowns>;
 
 async function newProject() {
@@ -35,12 +40,18 @@ async function newProject() {
     type: multiModeBtn.checked ? CalendarType.MultiPage : CalendarType.SinglePage,
   };
 
-  // Purge all current content
-  calendarContainer.innerHTML = '';
-  // Set new calendar in IDB via DS with user's input data
-  await dataController?.reset(newCalendarData);
-  // Generate new calendar
-  newCalendar();
+  try {
+    // Set new calendar in IDB via DS with user's input data
+    await dataController?.reset(newCalendarData);
+
+    // Purge all current content
+    calendarContainer.innerHTML = '';
+    // Generate new calendar
+    newCalendar();
+  } catch (err) {
+    console.log('Failed to create new project:', err);
+    alert('Failed to create the new calendar. Please try again.');
+  }
 }
 
 function newCalendar() {
@@ -68,8 +79,15 @@ window.addEventListener(
   async () => {
     userInputs = createDropdowns();
 
+    // Disable calendar-creation entry points until fonts are loaded and any
+    // saved project has been restored, so a new project can't be created
+    // (and silently overwrite a saved one) while that is still in flight.
+    introCtaBtn.disabled = true;
+
     // Generate new calendar from inputs
     getButton.addEventListener('click', () => {
+      if (!isReady) return;
+
       animateNewProjectOverlay(newProjectOverlayBG, newProjectOverlaySection, 'out');
       newProject();
     });
@@ -93,6 +111,8 @@ window.addEventListener(
 
     // Open the new project overlay from the intro screen
     introCtaBtn.addEventListener('click', () => {
+      if (!isReady) return;
+
       introSection.classList.add('hide');
       animateNewProjectOverlay(newProjectOverlayBG, newProjectOverlaySection, 'in');
     });
@@ -100,10 +120,10 @@ window.addEventListener(
     // Init dataController
     dataController = new DataController();
 
-    // Load fonts from /assets
-    await dataController.loadFonts();
-
     try {
+      // Load fonts from /assets
+      await dataController.loadFonts();
+
       // If some data in IDB - get it and store in DS object
       await dataController.retrieveDataFromIDB();
 
@@ -112,7 +132,10 @@ window.addEventListener(
         newCalendar();
       }
     } catch (err) {
-      console.log('Failed to restore saved project:', err);
+      console.log('Failed to initialize app:', err);
+    } finally {
+      isReady = true;
+      introCtaBtn.disabled = false;
     }
   },
   { once: true },

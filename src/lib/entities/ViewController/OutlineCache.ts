@@ -26,8 +26,8 @@ export default class OutlineCache {
 
     const outline: CachedOutline = {
       d: path.toPathData(2),
-      xShift: Number(((x2 - x1) / 2).toFixed(2)),
-      yShift: Number(((y2 - y1) / 2).toFixed(2)),
+      xShift: Number(((x1 + x2) / 2).toFixed(2)),
+      yShift: Number(((y1 + y2) / 2).toFixed(2)),
     };
 
     this.cache.set(key, outline);

@@ -75,9 +75,9 @@ export default class DataController {
   }
 
   async reset(newCalendarData: CalendarData) {
+    await this.IDBController.resetWithNewData(newCalendarData);
+
     this.calendarProjectData = newCalendarData;
     this.calendarImagesData = [];
-
-    await this.IDBController.resetWithNewData(newCalendarData);
   }
 }

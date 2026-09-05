@@ -99,6 +99,7 @@ export default class UploadManager {
       }
     } catch (err) {
       console.log(err);
+      alert('Failed to upload image. Please try a different file.');
     }
   }
 }

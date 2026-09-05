@@ -117,7 +117,10 @@ export default class ImageCropper {
           this.cropper.zoomRatio =
             this.cropper.getCanvasData().width / this.cropper.getCanvasData().naturalWidth;
 
-          if (this.cropper.zoomRatio.toFixed(5) > this.cropper.initialZoomRatio.toFixed(5)) {
+          if (
+            Number(this.cropper.zoomRatio.toFixed(5)) >
+            Number(this.cropper.initialZoomRatio.toFixed(5))
+          ) {
             this.cropper.setDragMode('move');
             this.cropper.options.viewMode = 3;
           } else {
@@ -129,6 +132,11 @@ export default class ImageCropper {
     } catch (err) {
       this.imageToCrop.style.visibility = 'visible';
       this.cropperOuter.style.pointerEvents = 'none';
+
+      if (this.tempCropImageElement) {
+        URL.revokeObjectURL(this.tempCropImageElement.src);
+        this.tempCropImageElement = undefined;
+      }
 
       this.cropperOuter.innerHTML = '';
 

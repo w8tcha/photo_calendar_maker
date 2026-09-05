@@ -7,8 +7,8 @@ export default function animateCropControlsContainer(
   const tl = gsap.timeline();
 
   if (direction === 'in') {
-    tl.fromTo(cropControlsContainer, { bottom: '-4rem' }, { bottom: '2rem', ease: 'power.in' });
+    tl.fromTo(cropControlsContainer, { bottom: '-4rem' }, { bottom: '2rem', ease: 'power1.in' });
   } else {
-    tl.fromTo(cropControlsContainer, { bottom: '2rem' }, { bottom: '-4rem', ease: 'power.out' });
+    tl.fromTo(cropControlsContainer, { bottom: '2rem' }, { bottom: '-4rem', ease: 'power1.out' });
   }
 }

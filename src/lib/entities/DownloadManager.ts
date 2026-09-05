@@ -79,6 +79,17 @@ export default class DownloadManager {
     }
   }
 
+  private static getPDFImageFormat(mimeType: string): 'JPEG' | 'PNG' | 'WEBP' {
+    switch (mimeType) {
+      case 'image/png':
+        return 'PNG';
+      case 'image/webp':
+        return 'WEBP';
+      default:
+        return 'JPEG';
+    }
+  }
+
   public async downloadPDF(range: PDFPagesRangeToDownload) {
     this.options.showLoader();
 
@@ -135,7 +146,7 @@ export default class DownloadManager {
 
           pdf.addImage(
             uint8Array,
-            'JPEG',
+            DownloadManager.getPDFImageFormat(imageBlob.image.type),
             offsetX, // Centered X position
             offsetY, // Centered Y position
             scaledWidth,
@@ -189,5 +200,8 @@ export default class DownloadManager {
     a.href = elementURL;
     a.click();
     a.remove();
+
+    // Delay revocation so the browser has time to start the download from the blob URL.
+    setTimeout(() => URL.revokeObjectURL(elementURL), 1000);
   }
 }

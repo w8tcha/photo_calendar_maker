@@ -11,7 +11,7 @@ export default function animateNewProjectOverlay(
 
     const modalIn = gsap.timeline();
 
-    modalIn.fromTo(bgElement, { scale: 0 }, { scale: 100, duration: 1, ease: 'power.out' });
+    modalIn.fromTo(bgElement, { scale: 0 }, { scale: 100, duration: 1, ease: 'power1.out' });
     modalIn.fromTo(sectionElement, { opacity: 0 }, { opacity: 1 }, '>-80%');
   } else {
     const modalOut = gsap.timeline();
@@ -21,7 +21,7 @@ export default function animateNewProjectOverlay(
     modalOut.fromTo(
       bgElement,
       { scale: 100 },
-      { scale: 0, display: 'none', ease: 'power.in' },
+      { scale: 0, display: 'none', ease: 'power1.in' },
       '<-80%',
     );
 
