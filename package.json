@@ -2,6 +2,7 @@
   "name": "photo_calendar_maker",
   "version": "1.0.0",
   "description": "Photo calendar templates generator",
+  "packageManager": "pnpm@11.25.0",
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "engines": {
     "node": ">=20.0.0",
