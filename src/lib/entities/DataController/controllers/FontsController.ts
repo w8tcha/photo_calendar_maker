@@ -11,7 +11,14 @@ export default class FontsController {
 
       const fonts = await Promise.all(
         [fontBoldBuffer, fontMeiumBuffer].map(async (res) => {
-          return opentype.parse(await res.arrayBuffer());
+          const font = opentype.parse(await res.arrayBuffer());
+
+          // Some fonts (e.g. Montserrat) ship GSUB lookup subtypes opentype.js
+          // can't parse, which throws when rendering. We only need plain glyph
+          // outlines here, so drop GSUB to skip ligature/contextual substitution.
+          delete font.tables.gsub;
+
+          return font;
         }),
       );
 
