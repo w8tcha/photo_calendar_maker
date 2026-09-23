@@ -4,5 +4,7 @@ allowBuilds:
   esbuild: false
 minimumReleaseAgeExclude:
   - eslint@10.10.0
+  - prettier@3.9.9
+  - sass@1.105.0
 patchedDependencies:
   opentype.js: patches/opentype.js.patch
