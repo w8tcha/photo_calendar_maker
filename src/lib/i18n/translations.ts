@@ -12,6 +12,17 @@ export type TranslationKey =
   | 'newProject.singlePage'
   | 'newProject.multiPage'
   | 'newProject.create'
+  | 'newProject.open'
+  | 'newProject.save'
+  | 'newProject.edit'
+  | 'newProject.delete'
+  | 'newProject.cancel'
+  | 'newProject.name'
+  | 'newProject.lockedHint'
+  | 'newProject.confirmDelete'
+  | 'newProject.defaultName'
+  | 'dropdown.projects'
+  | 'dropdown.newProject'
   | 'dropdown.startYear'
   | 'dropdown.firstMonth'
   | 'dropdown.font'
@@ -48,14 +59,25 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
     'intro.feature2': 'Choose your layout & font',
     'intro.feature3': 'Export as PDF or JPG, ready to print',
     'intro.cta': 'Create your calendar',
-    'newProject.title': 'New calendar',
+    'newProject.title': 'Project',
     'newProject.singlePage': 'Single-page',
     'newProject.multiPage': 'Multi-page',
     'newProject.create': 'Create',
+    'newProject.open': 'Open',
+    'newProject.save': 'Save',
+    'newProject.edit': 'Edit',
+    'newProject.delete': 'Delete',
+    'newProject.cancel': 'Cancel',
+    'newProject.name': 'Name',
+    'newProject.lockedHint': 'Format and type cannot be changed after creation',
+    'newProject.confirmDelete': 'Delete project “{name}”? All of its images will be deleted.',
+    'newProject.defaultName': 'Calendar {year} · {format}',
     'dropdown.startYear': 'Start year',
     'dropdown.firstMonth': 'First month',
     'dropdown.font': 'Font',
     'dropdown.format': 'Format',
+    'dropdown.projects': 'Projects',
+    'dropdown.newProject': 'New',
     'format.portrait': 'portrait',
     'format.landscape': 'landscape',
     'errors.createProjectFailed': 'Failed to create the new calendar. Please try again.',
@@ -81,14 +103,26 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
     'intro.feature2': 'Layout & Schriftart wählen',
     'intro.feature3': 'Als PDF oder JPG exportieren, druckfertig',
     'intro.cta': 'Kalender erstellen',
-    'newProject.title': 'Neuer Kalender',
+    'newProject.title': 'Projekt',
     'newProject.singlePage': 'Einzelseite',
     'newProject.multiPage': 'Mehrseitig',
     'newProject.create': 'Erstellen',
+    'newProject.open': 'Öffnen',
+    'newProject.save': 'Speichern',
+    'newProject.edit': 'Bearbeiten',
+    'newProject.delete': 'Löschen',
+    'newProject.cancel': 'Abbrechen',
+    'newProject.name': 'Name',
+    'newProject.lockedHint': 'Format und Typ können nach dem Erstellen nicht mehr geändert werden',
+    'newProject.confirmDelete':
+      'Projekt „{name}“ löschen? Alle zugehörigen Bilder werden gelöscht.',
+    'newProject.defaultName': 'Kalender {year} · {format}',
     'dropdown.startYear': 'Startjahr',
     'dropdown.firstMonth': 'Erster Monat',
     'dropdown.font': 'Schriftart',
     'dropdown.format': 'Format',
+    'dropdown.projects': 'Projekte',
+    'dropdown.newProject': 'Neu',
     'format.portrait': 'Hochformat',
     'format.landscape': 'Querformat',
     'errors.createProjectFailed':
@@ -116,14 +150,25 @@ export const translations: Record<AppLanguage, Record<TranslationKey, string>> =
     'intro.feature2': 'Выберите макет и шрифт',
     'intro.feature3': 'Экспорт в PDF или JPG, готово к печати',
     'intro.cta': 'Создать календарь',
-    'newProject.title': 'Новый календарь',
+    'newProject.title': 'Проект',
     'newProject.singlePage': 'Одна страница',
     'newProject.multiPage': 'Несколько страниц',
     'newProject.create': 'Создать',
+    'newProject.open': 'Открыть',
+    'newProject.save': 'Сохранить',
+    'newProject.edit': 'Изменить',
+    'newProject.delete': 'Удалить',
+    'newProject.cancel': 'Отмена',
+    'newProject.name': 'Название',
+    'newProject.lockedHint': 'Формат и тип нельзя изменить после создания',
+    'newProject.confirmDelete': 'Удалить проект «{name}»? Все его изображения будут удалены.',
+    'newProject.defaultName': 'Календарь {year} · {format}',
     'dropdown.startYear': 'Год начала',
     'dropdown.firstMonth': 'Первый месяц',
     'dropdown.font': 'Шрифт',
     'dropdown.format': 'Формат',
+    'dropdown.projects': 'Проекты',
+    'dropdown.newProject': 'Новый',
     'format.portrait': 'книжная',
     'format.landscape': 'альбомная',
     'errors.createProjectFailed': 'Не удалось создать новый календарь. Попробуйте ещё раз.',

@@ -32,8 +32,8 @@ export function getLanguage(): AppLanguage {
   return currentLanguage;
 }
 
-export function t(key: TranslationKey): string {
-  return translations[currentLanguage][key] ?? translations[AppLanguage.EN][key];
+export function t(key: TranslationKey, lang: AppLanguage = currentLanguage): string {
+  return translations[lang][key] ?? translations[AppLanguage.EN][key];
 }
 
 export function onLanguageChange(listener: LanguageChangeListener): void {

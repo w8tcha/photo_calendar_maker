@@ -98,7 +98,7 @@
   </button>
 
   <section class="new-project-section">
-    <h1 data-i18n="newProject.title">New calendar</h1>
+    <h1 data-i18n="newProject.title">Project</h1>
     <div class="new-project-section__close-modal" data-i18n-tooltip="tooltip.closeModal"
       data-i18n-aria-label="tooltip.closeModal" data-tooltip-pos="bottom">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -110,26 +110,41 @@
       </svg>
     </div>
 
-    <div class="new-project-section__mode-radio-btns">
-      <div class="single">
-        <input type="radio" id="single-page" name="calendar-mode" value="single-page" />
-        <label for="single-page" data-i18n="newProject.singlePage">Single-page</label>
-      </div>
-      <div class="multi">
-        <input type="radio" id="multi-page" name="calendar-mode" value="multi-page" checked />
-        <label for="multi-page" data-i18n="newProject.multiPage">Multi-page</label><br />
-      </div>
-    </div>
+    <div id="projects-dropdown" class="hide"></div>
 
-    <div class="new-project-section__calendar-options">
-      <div id="year-dropdown"></div>
-      <div id="month-dropdown"></div>
-      <div id="font-dropdown"></div>
-      <div id="format-dropdown"></div>
+    <div class="new-project-section__settings">
+      <div class="new-project-section__mode-radio-btns">
+        <div class="single">
+          <input type="radio" id="single-page" name="calendar-mode" value="single-page" />
+          <label for="single-page" data-i18n="newProject.singlePage">Single-page</label>
+        </div>
+        <div class="multi">
+          <input type="radio" id="multi-page" name="calendar-mode" value="multi-page" checked />
+          <label for="multi-page" data-i18n="newProject.multiPage">Multi-page</label><br />
+        </div>
+      </div>
+
+      <p class="new-project-section__locked-hint hide" data-i18n="newProject.lockedHint">
+        Format and type cannot be changed after creation
+      </p>
+
+      <div class="new-project-section__calendar-options">
+        <div class="text-input">
+          <label class="text-input__caption" for="project-name-input" data-i18n="newProject.name">Name</label>
+          <input class="text-input__field" id="project-name-input" type="text" autocomplete="off" />
+        </div>
+        <div id="year-dropdown"></div>
+        <div id="month-dropdown"></div>
+        <div id="font-dropdown"></div>
+        <div id="format-dropdown"></div>
+      </div>
     </div>
 
     <div class="new-project-section__get-button-container">
       <button id="get-button" data-i18n="newProject.create">Create</button>
+      <button id="edit-button" class="hide" data-i18n="newProject.edit">Edit</button>
+      <button id="delete-button" class="hide" data-i18n="newProject.delete">Delete</button>
+      <button id="cancel-button" class="hide" data-i18n="newProject.cancel">Cancel</button>
     </div>
   </section>
 

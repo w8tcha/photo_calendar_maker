@@ -18,7 +18,7 @@ export class Calendar {
   private uploadManager: UploadManager;
   private downloadManager: DownloadManager;
 
-  font: FontData = {};
+  font: FontData;
   outputDimensions: OutputDimensions;
   mockupOptions: SinglePageMockupOutputOptions | MultiPageMockupOutputOptions;
 
@@ -111,11 +111,11 @@ export class Calendar {
     // Downloader
     this.downloadManager = new DownloadManager({
       calendarType: type,
+      lang,
       calendarFirstMonth: this.firstMonth,
       calendarStartYear: this.startYear,
       calendarLastMonth: this.lastMonth,
       calendarEndYear: this.endYear,
-      calendarLang: lang,
       format: format,
       outputDimensions: this.outputDimensions,
       mockupOptions: this.mockupOptions,
@@ -123,6 +123,7 @@ export class Calendar {
       getCurrentMockup: this.viewController.getCurrentMockup,
       svgMockups: this.viewController.svgMockups,
       storedImages,
+      font: this.font,
       showLoader: this.showLoader,
       hideLoader: this.hideLoader,
     });
@@ -146,7 +147,7 @@ export class Calendar {
     if (currentImageElement) {
       await this.imageCropper.start(currentImageElement as SVGImageElement);
 
-      if (this.imageCropper.cropper) {
+      if (this.imageCropper.isActive) {
         animateControlsContainer(this.controlsContainer, 'out');
         animateCropControlsContainer(this.cropControlsContainer, 'in');
       }

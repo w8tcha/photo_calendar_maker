@@ -1,5 +1,3 @@
-import { Font } from 'opentype.js';
-
 export enum AppLanguage {
   EN = 'en',
   DE = 'de',
@@ -50,14 +48,10 @@ declare global {
 
   type AnimationDirection = 'in' | 'out';
 
-  interface Cropper {
-    initialZoomRatio: number;
-    initialCanvasData: Cropper.CanvasData;
-    zoomRatio: number;
-    options: Cropper.Options;
-  }
-
   type CalendarData = {
+    name: string;
+    createdAt: number;
+    lastOpenedAt: number;
     startYear: number;
     firstMonthIndex: number;
     lang: AppLanguage;
@@ -66,12 +60,35 @@ declare global {
     type: CalendarType;
   };
 
+  /**
+   * Project settings that can be changed after creation
+   */
+  type EditableProjectSettings = Pick<
+    CalendarData,
+    'name' | 'startYear' | 'firstMonthIndex' | 'lang' | 'font'
+  >;
+
+  /**
+   * Project record as stored in IDB `projects` store
+   */
+  type StoredProject = CalendarData & { id: number };
+
+  /**
+   * In-memory image of the active project, keyed by month index
+   */
   type StoredImage = {
     id: number;
     image: Blob;
   };
 
-  type FontArray = Font[];
+  /**
+   * Image record as stored in IDB `images` store
+   */
+  type StoredProjectImage = {
+    projectId: number;
+    monthIndex: number;
+    image: Blob;
+  };
 
   type SourceFontData = {
     fontNameBold: string;
@@ -84,12 +101,37 @@ declare global {
     Caveat: SourceFontData;
   };
 
-  type LoadedFontsObject = {
-    [key: string]: FontArray;
+  /**
+   * Data needed to register single font weight in jsPDF virtual file system
+   */
+  type VFSFontData = {
+    /** Font family name to reference from SVG `font-family` */
+    family: string;
+    /** Virtual file name inside jsPDF VFS */
+    fileName: string;
+    base64: string;
+  };
+
+  /**
+   * Single font weight ready to be embedded into SVG / PDF
+   */
+  type EmbeddableFont = {
+    /** CSS font-family name (equals TTF file base name) */
+    family: string;
+    bytes: ArrayBuffer;
+    base64: string;
+    /** Ready-to-inject `@font-face` rule for this weight */
+    fontFace: string;
+    /** Ready-to-register jsPDF VFS font data for this weight */
+    vfs: VFSFontData;
   };
 
   type FontData = {
-    [key: string]: Font;
+    [key in FontSubfamily]: EmbeddableFont;
+  };
+
+  type LoadedFontsObject = {
+    [key: string]: FontData;
   };
 
   interface CreateHTMLElementParams<TagName> {
@@ -169,7 +211,6 @@ declare global {
     monthCellPadding: number;
     calendarGridLeftIndent: number;
     calendarGridTopIndent: number;
-    descenderException: number;
     numberOfColumns: number;
     [key: string]: string | number | FormatWidthHeigth;
   }

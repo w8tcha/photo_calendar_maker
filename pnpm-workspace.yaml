@@ -17,5 +17,4 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/utils@8.71.1'
   - '@typescript-eslint/visitor-keys@8.71.1'
   - typescript-eslint@8.71.1
-patchedDependencies:
-  opentype.js: patches/opentype.js.patch
+  - '@hungrysamurai/cropper@0.1.0'

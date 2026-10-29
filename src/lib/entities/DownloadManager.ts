@@ -10,21 +10,37 @@ import readFile from '../utils/readFile';
 
 export type DownloadManagerOptions = {
   calendarType: CalendarType;
+  lang: AppLanguage;
   calendarFirstMonth: number;
   calendarStartYear: number;
   calendarLastMonth: number;
   calendarEndYear: number;
-  calendarLang: AppLanguage;
   format: FormatName;
   outputDimensions: OutputDimensions;
   mockupOptions: SinglePageMockupOutputOptions | MultiPageMockupOutputOptions;
   svgMockups: SVGElement[];
   storedImages: StoredImage[];
+  font: FontData;
   getCurrentMonth: () => number;
   getCurrentMockup: (element?: string) => SVGElement | SVGImageElement;
   showLoader: () => void;
   hideLoader: () => void;
 };
+
+/**
+ * jsPDF advanced API (used by svg2pdf) miscalculates text baseline offsets for any unit
+ * other than 'pt' (offset gets divided by the unit scale factor), so PDF is built in points
+ * and mockup millimeters are converted here
+ */
+const MM_TO_PT = 72 / 25.4;
+
+/**
+ * Uploads are normalised to JPEG, but projects stored before that may still hold PNGs -
+ * jsPDF decodes bytes by declared format, so it must match the blob
+ */
+function getPDFImageFormat(image: Blob): 'JPEG' | 'PNG' {
+  return image.type === 'image/png' ? 'PNG' : 'JPEG';
+}
 
 export default class DownloadManager {
   constructor(private options: DownloadManagerOptions) {}
@@ -37,6 +53,10 @@ export default class DownloadManager {
       const { width, height } = this.options.outputDimensions[this.options.format];
 
       const pageClone = this.options.svgMockups[monthIndex].cloneNode(true) as SVGElement;
+
+      // Detached blob-loaded SVG can't see page CSS - fonts must live inside the markup
+      this.ensureFontFaceStyle(pageClone);
+
       const imageEl = pageClone.querySelector('image');
 
       if (imageEl) {
@@ -80,17 +100,6 @@ export default class DownloadManager {
     }
   }
 
-  private static getPDFImageFormat(mimeType: string): 'JPEG' | 'PNG' | 'WEBP' {
-    switch (mimeType) {
-      case 'image/png':
-        return 'PNG';
-      case 'image/webp':
-        return 'WEBP';
-      default:
-        return 'JPEG';
-    }
-  }
-
   public async downloadPDF(range: PDFPagesRangeToDownload) {
     this.options.showLoader();
 
@@ -111,10 +120,13 @@ export default class DownloadManager {
           ? this.options.svgMockups
           : [this.options.svgMockups[monthIndex]];
 
-      const pdf = new jsPDF(mockupWidth > mockupHeight ? 'l' : 'p', 'mm', [
-        mockupWidth,
-        mockupHeight,
-      ]);
+      const pageWidth = mockupWidth * MM_TO_PT;
+      const pageHeight = mockupHeight * MM_TO_PT;
+
+      const pdf = new jsPDF(mockupWidth > mockupHeight ? 'l' : 'p', 'pt', [pageWidth, pageHeight]);
+
+      // svg2pdf resolves <text> font-family against fonts registered on this jsPDF instance
+      this.registerFonts(pdf);
 
       for (let i = 0; i < pagesToDownload.length; i++) {
         const pageClone = pagesToDownload[i].cloneNode(true) as SVGElement;
@@ -124,7 +136,9 @@ export default class DownloadManager {
           imageEl.remove();
         }
 
-        await pdf.svg(pageClone, { x: 0, y: 0, width: mockupWidth, height: mockupHeight });
+        this.resolveCenteredText(pageClone, pdf);
+
+        await pdf.svg(pageClone, { x: 0, y: 0, width: pageWidth, height: pageHeight });
 
         // If download individual page - find image by index of SVG, else - proceed in sequence
         const imageIndex = range === PDFPagesRangeToDownload.All ? i : monthIndex;
@@ -147,11 +161,11 @@ export default class DownloadManager {
 
           pdf.addImage(
             uint8Array,
-            DownloadManager.getPDFImageFormat(imageBlob.image.type),
-            offsetX, // Centered X position
-            offsetY, // Centered Y position
-            scaledWidth,
-            scaledHeight,
+            getPDFImageFormat(imageBlob.image),
+            offsetX * MM_TO_PT, // Centered X position
+            offsetY * MM_TO_PT, // Centered Y position
+            scaledWidth * MM_TO_PT,
+            scaledHeight * MM_TO_PT,
           );
         }
 
@@ -165,34 +179,91 @@ export default class DownloadManager {
     }
   }
 
+  /**
+   * Register both weights of selected font in jsPDF VFS so every page embeds them.
+   * Throws if embeddable font data is missing - no silent fallback typeface in exports.
+   */
+  private registerFonts(pdf: jsPDF): void {
+    const { font } = this.options;
+
+    if (!font?.bold?.vfs || !font?.regular?.vfs) {
+      throw new Error('Embeddable font data is missing');
+    }
+
+    for (const { family, fileName, base64 } of [font.bold.vfs, font.regular.vfs]) {
+      pdf.addFileToVFS(fileName, base64);
+      // <text> elements carry no font-weight, so svg2pdf looks up the 'normal' style
+      pdf.addFont(fileName, family, 'normal');
+    }
+  }
+
+  /**
+   * svg2pdf resolves `text-anchor="middle"` by measuring strings in the browser at the SVG
+   * font size - for single-page mockups that is ~1.5px, where glyph advances get rounded
+   * and digits drift horizontally. Center from exact embedded font metrics instead.
+   */
+  private resolveCenteredText(svg: SVGElement, pdf: jsPDF): void {
+    svg.querySelectorAll('text[text-anchor="middle"]').forEach((textEl) => {
+      const family = textEl.getAttribute('font-family');
+      const fontSize = Number(textEl.getAttribute('font-size'));
+      const x = Number(textEl.getAttribute('x'));
+
+      if (!family || !fontSize || Number.isNaN(x)) return;
+
+      // Document is in 'pt' with scale factor 1, so width comes back in SVG user units
+      pdf.setFont(family, 'normal');
+      pdf.setFontSize(fontSize);
+      const width = pdf.getTextWidth(textEl.textContent ?? '');
+
+      textEl.setAttribute('x', `${x - width / 2}`);
+      textEl.setAttribute('text-anchor', 'start');
+    });
+  }
+
+  /**
+   * Make sure SVG carries `@font-face` rules for both weights of selected font.
+   * Throws if embeddable font data is missing - no silent fallback typeface in exports.
+   */
+  private ensureFontFaceStyle(svg: SVGElement): void {
+    const { font } = this.options;
+
+    if (!font?.bold?.fontFace || !font?.regular?.fontFace) {
+      throw new Error('Embeddable font data is missing');
+    }
+
+    const rules = [font.bold.fontFace, font.regular.fontFace];
+
+    const hasAllRules = Array.from(svg.querySelectorAll('style')).some((styleEl) =>
+      rules.every((rule) => styleEl.textContent?.includes(rule)),
+    );
+
+    if (hasAllRules) return;
+
+    svg.prepend(createSVGElement({ elementName: 'style', text: rules.join('\n') }));
+  }
+
   private getFileName(span?: boolean): string {
     if (span || this.options.calendarType === CalendarType.SinglePage) {
-      const firstMonth = this.options.calendarFirstMonth;
-      const firstMonthYear = this.options.calendarStartYear;
+      const { calendarFirstMonth, calendarStartYear, calendarLastMonth, calendarEndYear } =
+        this.options;
 
-      const date1 = new Date(Number(firstMonthYear), Number(firstMonth));
-      const firstMonthName = date1.toLocaleString(this.options.calendarLang, { month: 'long' });
+      const firstMonthName = this.getMonthName(calendarFirstMonth, calendarStartYear);
+      const lastMonthName = this.getMonthName(calendarLastMonth, calendarEndYear);
 
-      const lastMonth = this.options.calendarLastMonth;
-      const lastMonthYear = this.options.calendarEndYear;
-
-      const date2 = new Date(+lastMonthYear, +lastMonth);
-      const lastMonthName = date2.toLocaleString(this.options.calendarLang, {
-        month: 'long',
-      });
-
-      return `${firstMonthName}_${firstMonthYear}-${lastMonthName}_${lastMonthYear}`;
+      return `${firstMonthName}_${calendarStartYear}-${lastMonthName}_${calendarEndYear}`;
     }
 
     const currentMonthContainer = this.options.getCurrentMockup();
 
-    const year = currentMonthContainer.dataset.year;
-    const month = currentMonthContainer.dataset.month;
+    const year = Number(currentMonthContainer.dataset.year);
+    const month = Number(currentMonthContainer.dataset.month);
 
-    const date = new Date(Number(year), Number(month));
-    const monthName = date.toLocaleString(this.options.calendarLang, { month: 'long' });
+    return `${this.getMonthName(month, year)}_${year}`;
+  }
 
-    return `${monthName}_${year}`;
+  // Month name follows calendar language, not browser locale, so file name matches the page
+  private getMonthName(month: number, year: number): string {
+    return new Date(year, month).toLocaleString(this.options.lang, { month: 'long' });
   }
 
   private downloadElement(elementURL: string, fileName: string): void {

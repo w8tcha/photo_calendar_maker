@@ -8,19 +8,26 @@ import {
 import { Dropdown } from './Dropdown';
 
 import getYears from '../getYears';
+import getFormatLabel from '../getFormatLabel';
 import { getMonthsList } from '../getMonthsList';
 import fontsData from '../../../assets/sourceFontsData';
 import { A_outputFormats } from '../../../assets/A_FormatOptions/A_OutputDimensions';
 import { FormatName } from '../../../types';
 import { getLanguage, onLanguageChange, t } from '../../i18n/i18n';
 
-export default function createDropdowns() {
+/**
+ * @param onChange - called whenever a dropdown that affects the generated project name changes
+ */
+export default function createDropdowns(onChange?: () => void) {
   // Create years dropdown
+  const years = getYears(10);
+
   const yearsInput = new Dropdown<number>({
     container: yearDropdownContainer,
-    items: getYears(10),
+    items: years,
     caption: t('dropdown.startYear'),
     renderItem: (item) => item.toString(),
+    onChange,
   });
 
   // Create months dropdown
@@ -55,14 +62,8 @@ export default function createDropdowns() {
     items: Object.keys(A_outputFormats) as FormatName[],
     value: FormatName.A4_Y,
     caption: t('dropdown.format'),
-    renderItem: (format) => {
-      const formatPrefix = format.slice(0, 2);
-      if (format.endsWith('Y')) {
-        return `${formatPrefix} ${t('format.portrait')}`;
-      } else {
-        return `${formatPrefix} ${t('format.landscape')}`;
-      }
-    },
+    renderItem: (format) => getFormatLabel(format),
+    onChange,
   });
 
   // Keep dropdown captions & translated labels in sync with the app language,
@@ -81,5 +82,5 @@ export default function createDropdowns() {
     formatsInput.refresh();
   });
 
-  return { yearsInput, monthsInput, fontsInput, formatsInput };
+  return { years, yearsInput, monthsInput, fontsInput, formatsInput };
 }
